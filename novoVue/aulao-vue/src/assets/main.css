@@ -1,0 +1,47 @@
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-weight: normal;
+}
+
+body{
+  margin: 0px;
+  background-color: black;
+  color: rgb(224,217,217);
+}
+
+header{
+  font-size: 2em;
+  color: white;
+  margin-bottom: 20px;
+  background-color: green;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+  margin: 30px;
+  border-radius: 10px;
+}
+
+input{
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 24px;
+  margin: 0px 5px 10px 0px
+
+}
+
+.componente {
+    background-color: rgb(22, 48, 194);
+    margin: 30px;
+    max;
+    text-align: center;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.componente:hover {
+    background-color: rgb(88, 88, 248);
+}
