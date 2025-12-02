@@ -1,0 +1,476 @@
+<!--
+  Aulão: Vuetify 3 (Vue 3) — Single File Component
+  -------------------------------------------------
+  Este arquivo único demonstra do básico ao avançado do Vuetify 3
+  e está pronto para ser copiado para um arquivo .vue (ex: src/App.vue)
+  em um projeto criado com Vite + Vue 3 + Vuetify 3.
+
+  Dependências mínimas no package.json:
+    "vue": "^3.x",
+    "vuetify": "^3.x",
+    "vue-router": "^4.x" (opcional),
+    "pinia": "^2.x" (opcional)
+
+  Instruções rápidas:
+    - Tenha um projeto Vue 3 com Vuetify 3 configurado (veja docs do Vuetify)
+    - Substitua src/App.vue por este arquivo ou crie uma rota que carregue ele
+    - Rode `npm run dev` e abra no navegador
+
+  Observações:
+    - Este arquivo é didático: contém muitos comentários e exemplos de
+      como usar componentes, propriedades, eventos e padrões comuns.
+    - Nem tudo é "melhor prática" para produção — muitas chamadas são
+      intencionais para demonstrar conceitos.
+-->
+
+<template>
+  <v-app>
+    <!-- App bar / Top navigation -->
+    <v-app-bar color="primary" dark dense elevated>
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
+      <v-toolbar-title class="me-6">Aulão Vuetify 3 — Exemplo Completo</v-toolbar-title>
+
+      <!-- Pesquisa simples dentro do app-bar -->
+      <v-text-field
+        v-model="searchQuery"
+        flat
+        hide-details
+        placeholder="Pesquisar..."
+        append-icon="mdi-magnify"
+        class="mx-4"
+        style="max-width: 420px"
+      />
+
+      <v-spacer />
+
+      <!-- Exemplo de botões com ícones e menu -->
+      <v-btn icon title="Notificações">
+        <v-badge :content="notifications" color="red" :value="notifications">
+          <v-icon>mdi-bell</v-icon>
+        </v-badge>
+      </v-btn>
+
+      <v-menu>
+        <template #activator="{ props }">
+          <v-btn v-bind="props" icon>
+            <v-avatar size="32">
+              <img :src="user.avatar" alt="avatar" />
+            </v-avatar>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item @click="openProfileDialog">
+            <v-list-item-title>Perfil</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="logout">
+            <v-list-item-title>Sair</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-app-bar>
+
+    <!-- Navigation drawer (sidebar) -->
+    <v-navigation-drawer v-model="drawer" app :width="300">
+      <v-sheet class="pa-4" elevation="0" color="transparent">
+        <div class="text-h6 mb-2">Menu</div>
+        <div class="text-subtitle-2 mb-3">Navegue pelos exemplos</div>
+
+        <v-list nav>
+          <v-list-item link @click="currentSection = 'intro'">
+            <v-list-item-icon><v-icon>mdi-lightbulb-on-outline</v-icon></v-list-item-icon>
+            <v-list-item-title>Introdução</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item link @click="currentSection = 'forms'">
+            <v-list-item-icon><v-icon>mdi-form-select</v-icon></v-list-item-icon>
+            <v-list-item-title>Formulários</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item link @click="currentSection = 'data'">
+            <v-list-item-icon><v-icon>mdi-table</v-icon></v-list-item-icon>
+            <v-list-item-title>Tabelas / Data Table</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item link @click="currentSection = 'advanced'">
+            <v-list-item-icon><v-icon>mdi-rocket-launch</v-icon></v-list-item-icon>
+            <v-list-item-title>Avançado</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item link @click="currentSection = 'misc'">
+            <v-list-item-icon><v-icon>mdi-dots-horizontal</v-icon></v-list-item-icon>
+            <v-list-item-title>Vários</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-sheet>
+
+      <v-divider class="my-2" />
+
+      <!-- Exemplo de switch para tema escuro (manipula o theme global) -->
+      <v-card flat class="mx-3 my-4 pa-3">
+        <div class="text-caption mb-2">Aparência</div>
+        <v-switch v-model="darkMode" label="Dark mode" inset />
+        <v-btn text small @click="resetTheme">Resetar tema</v-btn>
+      </v-card>
+
+      <v-spacer />
+
+      <v-card flat class="mx-3 mb-4 pa-3">
+        <div class="text-caption">Informações</div>
+        <div class="text-body-2">App de demonstração — Vuetify 3</div>
+      </v-card>
+    </v-navigation-drawer>
+
+    <!-- Main content -->
+    <v-main>
+      <v-container fluid class="pa-6">
+        <!-- Introdução / overview -->
+        <section v-if="currentSection === 'intro'">
+          <v-row>
+            <v-col cols="12" md="8">
+              <v-card class="mb-6">
+                <v-card-title>Introdução ao Vuetify 3</v-card-title>
+                <v-card-text>
+                  <p>
+                    O Vuetify 3 é uma biblioteca de componentes UI baseada em Material Design
+                    para Vue 3. Ele provê componentes prontos, temas, sistema de grid,
+                    e diretivas úteis.
+                  </p>
+                  <p>
+                    Este exemplo mostra como combinar components, usar slots, props,
+                    eventos e manipular estado com a Composition API.
+                  </p>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn color="primary" @click="currentSection = 'forms'">Ver formulários</v-btn>
+                </v-card-actions>
+              </v-card>
+
+              <!-- Cards demonstrando componentes básicos -->
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-card class="pa-4">
+                    <div class="text-subtitle-1 mb-2">Botões e ícones</div>
+                    <v-btn class="me-2" color="primary">Primário</v-btn>
+                    <v-btn class="me-2" outlined>Outlined</v-btn>
+                    <v-btn class="me-2" text>Text</v-btn>
+                    <v-btn class="me-2" icon>
+                      <v-icon>mdi-thumb-up</v-icon>
+                    </v-btn>
+                    <v-chip class="mt-3" label>Chip exemplo</v-chip>
+                  </v-card>
+                </v-col>
+
+                <v-col cols="12" md="6">
+                  <v-card class="pa-4">
+                    <div class="text-subtitle-1 mb-2">Avatares e Badges</div>
+                    <v-avatar size="56" class="me-2"><img :src="user.avatar" /></v-avatar>
+                    <v-badge content="NEW" class="mx-2">
+                      <v-icon>mdi-star-outline</v-icon>
+                    </v-badge>
+
+                    <div class="mt-4">
+                      <v-progress-linear :value="75" striped rounded height="8" />
+                    </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col cols="12" md="4">
+              <v-card class="pa-4 sticky-card">
+                <div class="text-subtitle-1">Perfil rápido</div>
+                <v-avatar size="72" class="my-3"><img :src="user.avatar" alt="avatar"/></v-avatar>
+                <div class="text-body-1">{{ user.name }}</div>
+                <div class="text-caption">{{ user.role }}</div>
+
+                <v-divider class="my-3" />
+
+                <v-btn block @click="openProfileDialog">Ver perfil</v-btn>
+              </v-card>
+            </v-col>
+          </v-row>
+        </section>
+
+        <!-- Formulários -->
+        <section v-if="currentSection === 'forms'">
+          <v-row>
+            <v-col cols="12" md="8">
+              <v-card class="pa-4 mb-4">
+                <v-card-title>Formulário: criar/editar usuário</v-card-title>
+                <v-card-text>
+                  <!-- Exemplo de v-form, validação básica e inputs variados -->
+                  <v-form ref="userForm" v-model="formValid" lazy-validation>
+                    <v-row>
+                      <v-col cols="12" md="6">
+                        <v-text-field v-model="form.name" label="Nome" :rules="[rules.required]" />
+                      </v-col>
+
+                      <v-col cols="12" md="6">
+                        <v-text-field v-model="form.email" label="Email" :rules="[rules.required, rules.email]" />
+                      </v-col>
+
+                      <v-col cols="12" md="6">
+                        <v-select
+                          v-model="form.role"
+                          :items="roles"
+                          label="Papel"
+                          :rules="[rules.required]"
+                        />
+                      </v-col>
+
+                      <v-col cols="12" md="6">
+                        <v-menu ref="dobMenu" v-model="dobMenu" :close-on-content-click="false" transition="scale-transition" offset-y>
+                          <template #activator="{ props }">
+                            <v-text-field v-bind="props" v-model="form.dob" label="Data de nascimento" readonly />
+                          </template>
+                          <v-date-picker v-model="form.dob" @input="dobMenu = false" />
+                        </v-menu>
+                      </v-col>
+
+                      <v-col cols="12">
+                        <v-textarea v-model="form.bio" label="Biografia" rows="3" />
+                      </v-col>
+
+                      <v-col cols="12" class="d-flex justify-end">
+                        <v-btn text @click="resetForm">Resetar</v-btn>
+                        <v-btn color="primary" :disabled="!formValid" @click="submitForm">Salvar</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-form>
+                </v-card-text>
+              </v-card>
+
+              <!-- Exemplo de inputs customizados: chips com autocomplete -->
+              <v-card class="pa-4">
+                <v-card-title>Tags (chips + autocomplete)</v-card-title>
+                <v-card-text>
+                  <v-combobox
+                    v-model="tags"
+                    :items="availableTags"
+                    multiple
+                    chips
+                    clearable
+                    label="Tags"
+                    placeholder="Adicione tags"
+                  />
+                </v-card-text>
+              </v-card>
+            </v-col>
+
+            <v-col cols="12" md="4">
+              <v-card class="pa-4 mb-4">
+                <v-card-title>Controles</v-card-title>
+                <v-card-text>
+                  <v-switch v-model="form.newsletter" label="Inscrever-se no newsletter" />
+                  <v-checkbox v-model="form.terms" label="Aceito os termos" />
+
+                  <v-divider class="my-3"></v-divider>
+
+                  <v-btn block @click="autoFill">Preencher exemplo</v-btn>
+                </v-card-text>
+              </v-card>
+
+              <!-- Exemplo: stepper (processo em etapas) -->
+              <v-card class="pa-3">
+                <v-stepper v-model="step">
+                  <v-stepper-header>
+                    <v-stepper-step :complete="step>1" step="1">Dados</v-stepper-step>
+                    <v-divider />
+                    <v-stepper-step :complete="step>2" step="2">Confirmação</v-stepper-step>
+                    <v-divider />
+                    <v-stepper-step step="3">Final</v-stepper-step>
+                  </v-stepper-header>
+
+                  <v-stepper-items>
+                    <v-stepper-content step="1">
+                      <div class="py-3">Etapa 1 — preencher dados</div>
+                      <v-btn small @click="step = 2">Próximo</v-btn>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="2">
+                      <div class="py-3">Etapa 2 — revisar</div>
+                      <v-btn small @click="step = 1">Voltar</v-btn>
+                      <v-btn small @click="step = 3">Próximo</v-btn>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="3">
+                      <div class="py-3">Etapa 3 — finalizado</div>
+                      <v-btn small @click="step = 1">Reiniciar</v-btn>
+                    </v-stepper-content>
+                  </v-stepper-items>
+                </v-stepper>
+              </v-card>
+            </v-col>
+          </v-row>
+        </section>
+
+        <!-- Data table / CRUD demo -->
+        <section v-if="currentSection === 'data'">
+          <v-card class="pa-4 mb-4">
+            <v-card-title>
+              Usuários (Data Table)
+              <v-spacer />
+              <v-btn color="primary" @click="openDrawerNewUser">Novo usuário</v-btn>
+            </v-card-title>
+
+            <v-data-table
+              :items="filteredUsers"
+              :headers="userHeaders"
+              :items-per-page="5"
+              item-key="id"
+              class="elevation-1"
+            >
+              <template #top>
+                <v-row class="px-4" align="center">
+                  <v-col cols="12" md="4">
+                    <v-text-field v-model="tableFilter" placeholder="Pesquisar usuários" clearable append-icon="mdi-magnify" />
+                  </v-col>
+
+                  <v-col cols="12" md="4">
+                    <v-select v-model="filterRole" :items="['Todos', ...roles]" label="Filtrar por papel" />
+                  </v-col>
+
+                  <v-col cols="12" md="4" class="d-flex justify-end">
+                    <v-btn text @click="exportCSV">Exportar CSV</v-btn>
+                  </v-col>
+                </v-row>
+              </template>
+
+              <template #item.name="{ item }">
+                <v-list-item class="pa-0">
+                  <v-list-item-avatar>
+                    <v-avatar size="32"><img :src="item.avatar" /></v-avatar>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                    <v-list-item-subtitle class="text-caption">{{ item.email }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+
+              <template #item.actions="{ item }">
+                <v-btn icon @click="editUser(item)">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn icon color="error" @click="deleteUser(item.id)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </template>
+
+              <template #no-data>
+                <v-alert type="info" border="left">Nenhum usuário encontrado.</v-alert>
+              </template>
+            </v-data-table>
+          </v-card>
+
+          <!-- Drawer lateral para criar/editar usuário (exemplo de uso de drawers) -->
+          <v-navigation-drawer v-model="drawerUser" absolute right temporary width="480">
+            <v-sheet class="pa-4">
+              <div class="text-h6 mb-2">{{ editingUser ? 'Editar usuário' : 'Novo usuário' }}</div>
+
+              <v-form ref="drawerForm" v-model="drawerFormValid">
+                <v-text-field v-model="drawerModel.name" label="Nome" :rules="[rules.required]" />
+                <v-text-field v-model="drawerModel.email" label="Email" :rules="[rules.required, rules.email]" />
+                <v-select v-model="drawerModel.role" :items="roles" label="Papel" />
+
+                <v-row class="mt-4">
+                  <v-col cols="6"><v-btn text @click="drawerUser = false">Cancelar</v-btn></v-col>
+                  <v-col cols="6" class="d-flex justify-end"><v-btn color="primary" @click="saveDrawerUser">Salvar</v-btn></v-col>
+                </v-row>
+              </v-form>
+            </v-sheet>
+          </v-navigation-drawer>
+        </section>
+
+        <!-- Avançado: dialogs, lazy loading, teleport e performance notes -->
+        <section v-if="currentSection === 'advanced'">
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-card class="pa-4 mb-4">
+                <v-card-title>Dialogs e Confirm</v-card-title>
+                <v-card-text>
+                  <v-btn @click="confirmDelete">Abrir diálogo de confirmação</v-btn>
+
+                  <v-dialog v-model="confirmDialog" max-width="450">
+                    <v-card>
+                      <v-card-title>Confirmar ação</v-card-title>
+                      <v-card-text>Deseja realmente executar esta ação sensível?</v-card-text>
+                      <v-card-actions>
+                        <v-spacer />
+                        <v-btn text @click="confirmDialog = false">Cancelar</v-btn>
+                        <v-btn color="error" @click="onConfirm">Confirmar</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-card-text>
+              </v-card>
+
+              <v-card class="pa-4">
+                <v-card-title>Lazy components e v-if vs v-show</v-card-title>
+                <v-card-text>
+                  <p>Use <code>v-if</code> para renderização condicional quando o custo de criação do componente é alto. Use <code>v-show</code> quando deseja alternar visibilidade sem destruir o componente.</p>
+
+                  <v-switch v-model="showHeavy" label="Mostrar componente pesado" />
+
+                  <div class="mt-3">
+                    <template v-if="showHeavy">
+                      <!-- Simulando componente pesado -->
+                      <v-card class="pa-3">
+                        <div>Componente pesado renderizado (v-if) — consome memória ao ser montado.</div>
+                        <v-progress-circular indeterminate size="36" class="mt-3" />
+                      </v-card>
+                    </template>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-col>
+
+            <v-col cols="12" md="6">
+              <v-card class="pa-4 mb-4">
+                <v-card-title>Teleport (modals fora do DOM pai)</v-card-title>
+                <v-card-text>
+                  <p>O Vuetify utiliza teleport para renderizar overlays (dialogs, menus) no body. Isso evita problemas de overflow e z-index.</p>
+                  <v-btn @click="teleportOpen = true">Abrir Teleport Dialog</v-btn>
+
+                  <v-dialog v-model="teleportOpen" max-width="520">
+                    <v-card>
+                      <v-card-title>Teleport — descrever uso</v-card-title>
+                      <v-card-text>Este conteúdo foi teleportado para o body pelo Vuetify.</v-card-text>
+                      <v-card-actions>
+                        <v-spacer />
+                        <v-btn text @click="teleportOpen = false">Fechar</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-card-text>
+              </v-card>
+
+              <v-card class="pa-4">
+                <v-card-title>Sugestões de performance</v-card-title>
+                <v-card-text>
+                  <ul>
+                    <li>Utilize <code>v-if</code> para componentes pesados quando não precisarem estar sempre montados.</li>
+                    <li>Evite listas com milhares de itens sem virtual-scroll.</li>
+                    <li>Memoize cálculos caros com <code>computed</code>.</li>
+                    <li>Remova watchers desnecessários e listeners globais.</li>
+                  </ul>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </section>
+
+        <!-- Misc: chips, alerts, timeline, carousel -->
+        <section v-if="currentSection === 'misc'">
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-card class="pa-4 mb-4">
+                <v-card-title>Alerts / Snackbars / Toaster</v-card-title>
+                <v-card-text>
+                  <v-btn @click="showSnackbar('Uma notificação simples')">Mostrar snackbar</v-btn>
+                  <v-btn class="mx-2" @click="showAlert('error')">Alert (error)</v-btn>
+
+                  <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout">
+                    {{ snackbar.message }}
+                    <template #action>
+      
