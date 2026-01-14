@@ -194,7 +194,6 @@ function reiniciar() {
 onMounted(() => {
   Random();
 });
-
 </script>
 
 <template>

@@ -34,7 +34,6 @@ const props = defineProps({ erros: Number });
   top: 70px;
   right: 70px;
   height: 100px;
-
 }
 
 .conteiner {
