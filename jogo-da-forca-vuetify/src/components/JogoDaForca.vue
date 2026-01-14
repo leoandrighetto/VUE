@@ -29,7 +29,6 @@ const dialogoSucesso = ref(false);
 
 //functions
 function tentarLetra(params) {
-
   if (typeof params === "number") {
     acertos.value += params;
 
@@ -64,7 +63,6 @@ function reiniciar() {
   dialogoSucesso.value = false;
 }
 
-
 //watchs
 watch(
   () => props.palavra,
@@ -74,9 +72,10 @@ watch(
     }
   }
 );
-
 </script>
 <template>
+
+  <v-container>
   <v-snackbar v-model="snackbar" style="transform: translate(0px,-300px);" :color='snackbarColor'>
     {{ text }}
 
@@ -129,7 +128,7 @@ watch(
 
   <Desenho :erros="erros" />
 
-
+</v-container>
 </template>
 
 <style scoped>

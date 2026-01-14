@@ -39,21 +39,18 @@ function teclar(letra) {
   <v-container>
     <v-row>
       <v-col lg="8">
-
         <v-responsive width="100%"> </v-responsive>
-
-        <div class="d-flex flex-wrap justify-center ga-2">
-
+        <div class="d-flex flex-wrap justify-center ga-2 ">
           <v-btn
-
             v-for="letra in teclado"
             :key="letra.id"
             :disabled="letra.teclada"
             @click="teclar(letra)"
             color="#01579b"
-            text-color="#ffff8d"
+            style="color: #FFF9C4"
             width="40"
             height="64"
+            class="text-h4"
 
             >{{ letra.valor }}
           </v-btn>
