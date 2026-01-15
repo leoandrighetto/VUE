@@ -7,12 +7,7 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="abrirNav" class="bg-teal-lighten-5">
-      <v-list class="text-medium-emphasis text-h6">
-        <v-list-item prepend-icon="mdi-home" to="Home">Home</v-list-item>
-        <v-list-item prepend-icon="mdi-account" to="Auth">Autenticação</v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <appNavigation @update:flag="abrirNav = $event" :flag="abrirNav" />
 
     <v-main>
       <router-view />
@@ -22,6 +17,7 @@
 
 <script setup>
 import { ref } from "vue";
+import AppNavigation from "./components/AppNavigation.vue";
 
 const abrirNav = ref(false);
 

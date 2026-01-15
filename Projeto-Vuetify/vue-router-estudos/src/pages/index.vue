@@ -1,6 +1,6 @@
 <script setup>
-import beatles from "../../assets/beatles.png";
-import O_Mundo_de_Beakman from "../../assets/O_Mundo_de_Beakman.webp";
+import beatles from "../assets/beatles.png";
+import O_Mundo_de_Beakman from "../assets/O_Mundo_de_Beakman.webp";
 </script>
 <template>
   <v-layout>
