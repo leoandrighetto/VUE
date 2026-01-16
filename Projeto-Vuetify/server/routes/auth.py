@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash
-from ..models import User
 from database.db import db
 
 auth = Blueprint("auth", __name__)
@@ -21,8 +20,23 @@ auth = Blueprint("auth", __name__)
 """
 
 
-@auth.route("/register", methods=["POST"])
-def register():
+@auth.route("/teste", methods=["POST"])
+def teste():
     # payload = {username, email, password}
+    usuario = request.get_json()
 
-    print("estou na rota")
+    nome = usuario.get("user")
+    email = usuario.get("email")
+    senha = usuario.get("password")
+
+    if not nome or not email or not senha:
+        return jsonify({"Erro": "Dados incompletos"}), 400
+
+    else:
+        return jsonify(
+            {
+                "nome": usuario.get("user"),
+                "email": usuario.get("email"),
+                "senha": usuario.get("password"),
+            }
+        ), 200
