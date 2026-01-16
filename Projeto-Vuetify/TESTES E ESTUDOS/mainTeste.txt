@@ -1,0 +1,27 @@
+"""PASSO A PASSO PARA CRIAR UM SITE FLASK"""
+
+# IMPORTAR FLASK
+from flask import Flask
+
+
+#Criar o aplicativo (site em si) com o parâmetro padrão.
+
+app = Flask(__name__)
+
+
+#após criar o app, apenas APÓS, importe as views
+from views import *
+
+# Criação de rotas
+
+"""
+#HOMEPAGE simples. Passada posteriormente para o arquivo de rotas VIEWS
+@app.route("/") # UM DECORADOR É UMA LINHA DE CÓDIGO QUE DÁ UMA FUNCIONALIDADE EXTRA PARA O CÓDIGO ABAIXO DELE.
+def homepage():
+    return "MEU SITE NO FLASK"
+"""
+
+
+# RODANDO O SITE PARA TESTE:
+if __name__ == "__main__":
+    app.run()
