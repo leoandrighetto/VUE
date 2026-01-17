@@ -1,6 +1,6 @@
 from flask import Flask
 from database.db import db
-import models
+from models import User
 from flask_cors import CORS
 
 from routes.auth import auth

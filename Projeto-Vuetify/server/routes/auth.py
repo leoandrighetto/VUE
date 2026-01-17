@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash
 from database.db import db
+from models import User
 
 auth = Blueprint("auth", __name__)
 
@@ -15,13 +16,11 @@ auth = Blueprint("auth", __name__)
             2.2 Se não houver dados repetidos e eles estiverem dentro das regras do banco:
                 3 eu criptografo o password
                 4 crio o novo objeto no db
-
-
 """
 
 
-@auth.route("/teste", methods=["POST"])
-def teste():
+@auth.route("/auth/registrar", methods=["POST"])
+def registrar():
     # payload = {username, email, password}
     usuario = request.get_json()
 
@@ -29,14 +28,22 @@ def teste():
     email = usuario.get("email")
     senha = usuario.get("password")
 
-    if not nome or not email or not senha:
-        return jsonify({"Erro": "Dados incompletos"}), 400
+    dados = ["user", "email", "password"]
 
-    else:
-        return jsonify(
-            {
-                "nome": usuario.get("user"),
-                "email": usuario.get("email"),
-                "senha": usuario.get("password"),
-            }
-        ), 200
+    for dado in dados:
+        if not usuario.get(dado):
+            return jsonify({"Erro": f"{dado} é obrigatório."}), 400
+
+    usuarios = User.query.all()
+
+    for user in usuarios:
+        if user.username == nome or user.email == email:
+            return jsonify({"Erro": "Dados já existentes"}), 400
+
+    password = generate_password_hash(senha)
+
+    user = User(username=nome, email=email, password=password)
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({"success": "Usuário cadastrado"}), 200

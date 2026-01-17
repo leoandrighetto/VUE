@@ -1,17 +1,13 @@
 <template>
   <v-container>
-    <div >
-      <v-row class="d-flex justify-center align-center mt-16">
-        <v-col>
-          <v-form
-            class="d-flex flex-column"
-            style="width: 400px"
-            v-model="formPreenchido"
-          >
+    <div>
+      <v-row class="d-flex justify-center align-center mt-16 flex-column">
+        <p class="text-h3">Cadastre-se</p>
+        <v-col style="width: 400px">
+          <v-form class="d-flex flex-column" style="width: 366px">
             <v-text-field
               prepend-icon="mdi-account"
               clearable
-              :rules="rules"
               label="nome"
               v-model="nome"
             ></v-text-field>
@@ -31,10 +27,7 @@
               label="senha"
               v-model="senha"
             ></v-text-field>
-            <v-btn
-              @click="testarRota"
-              :disabled="!formPreenchido"
-              :loading="loading"
+            <v-btn @click="registrarUsuario" :loading="loading"
               >REGISTRAR</v-btn
             >
           </v-form>
@@ -58,7 +51,7 @@ const text = ref("");
 const loading = ref(false);
 const formPreenchido = ref(false);
 
-async function testarRota() {
+async function registrarUsuario() {
   text.value = "";
   try {
     const payload = {
@@ -68,10 +61,13 @@ async function testarRota() {
     };
 
     loading.value = true;
-    const response = await authService.teste(payload);
+    const response = await authService.registrar(payload);
     loading.value = false;
+    console.log(response);
   } catch (error) {
     text.value = "ERRO";
+    loading.value = false;
+    text.value = "";
   }
 }
 
