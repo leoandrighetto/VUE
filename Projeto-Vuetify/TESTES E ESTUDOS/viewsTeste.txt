@@ -1,0 +1,11 @@
+from main import app
+
+#rotas
+@app.route("/") # UM DECORADOR É UMA LINHA DE CÓDIGO QUE DÁ UMA FUNCIONALIDADE EXTRA PARA O CÓDIGO ABAIXO DELE.
+def homepage():
+    return "MEU SITE NO FLASK"
+
+
+@app.route("/blog") # UM DECORADOR É UMA LINHA DE CÓDIGO QUE DÁ UMA FUNCIONALIDADE EXTRA PARA O CÓDIGO ABAIXO DELE.
+def blog():
+    return "MEU BLOG NO FLASK"
