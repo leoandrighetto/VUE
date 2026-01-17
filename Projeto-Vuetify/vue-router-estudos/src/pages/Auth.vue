@@ -32,7 +32,9 @@
             >
           </v-form>
 
-          <p>{{ text }}</p>
+          <p class="text-subititle-1 text-red text-uppercase mt-3">
+            {{ text }}
+          </p>
         </v-col>
       </v-row>
     </div>
@@ -62,12 +64,17 @@ async function registrarUsuario() {
 
     loading.value = true;
     const response = await authService.registrar(payload);
+
+    if (response){
     loading.value = false;
-    console.log(response);
+    text.value="Usuário cadastrado com sucesso!"}
   } catch (error) {
-    text.value = "ERRO";
     loading.value = false;
-    text.value = "";
+    if (error.response && error.response.data && error.response.data.Erro) {
+      text.value = error.response.data.Erro;
+    } else {
+      text.value = "Erro desconhecido. Tente novamente.";
+    }
   }
 }
 

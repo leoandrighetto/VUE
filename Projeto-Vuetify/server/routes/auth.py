@@ -21,7 +21,6 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/auth/registrar", methods=["POST"])
 def registrar():
-    # payload = {username, email, password}
     usuario = request.get_json()
 
     nome = usuario.get("user")
@@ -34,16 +33,21 @@ def registrar():
         if not usuario.get(dado):
             return jsonify({"Erro": f"{dado} é obrigatório."}), 400
 
-    usuarios = User.query.all()
+    consulta = User.buscar_usuario(nome, email)
 
-    for user in usuarios:
-        if user.username == nome or user.email == email:
-            return jsonify({"Erro": "Dados já existentes"}), 400
+    if consulta:
+        return jsonify({"Erro": "Dados já existentes"}), 400
 
-    password = generate_password_hash(senha)
+    try:
+        password = generate_password_hash(senha)
 
-    user = User(username=nome, email=email, password=password)
-    db.session.add(user)
-    db.session.commit()
+        user = User(username=nome, email=email, password=password)
+        db.session.add(user)
+        db.session.commit()
 
-    return jsonify({"success": "Usuário cadastrado"}), 200
+        return jsonify({"success": "Usuário cadastrado"}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        print(e)
+        return jsonify({"Erro": "500"}), 500
