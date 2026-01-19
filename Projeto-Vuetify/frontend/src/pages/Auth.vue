@@ -4,7 +4,7 @@
       <v-row class="d-flex justify-center align-center mt-16 flex-column">
         <p class="text-h3">Cadastre-se</p>
         <v-col style="width: 400px">
-          <v-form class="d-flex flex-column" style="width: 366px">
+          <v-form class="d-flex flex-column" v-model="formPreenchido" style="width: 366px">
             <v-text-field
               prepend-icon="mdi-account"
               clearable
@@ -43,8 +43,10 @@
 
 <script setup>
 import { ref } from "vue";
-
+import {useRouter} from 'vue-router';
 import { authService } from "../services/authService";
+
+const router = useRouter();
 
 const nome = ref("");
 const email = ref("");
@@ -67,13 +69,18 @@ async function registrarUsuario() {
 
     if (response){
     loading.value = false;
-    text.value="Usuário cadastrado com sucesso!"}
+    text.value="Usuário cadastrado com sucesso!"
+    localStorage.setItem('token', response.data.access_token)
+    router.push('/')}
+
   } catch (error) {
     loading.value = false;
     if (error.response && error.response.data && error.response.data.Erro) {
       text.value = error.response.data.Erro;
+      
     } else {
       text.value = "Erro desconhecido. Tente novamente.";
+      console.log(error)
     }
   }
 }

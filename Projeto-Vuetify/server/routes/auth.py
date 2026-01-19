@@ -3,20 +3,11 @@ from werkzeug.security import generate_password_hash
 from database.db import db
 from models import User
 
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+
 auth = Blueprint("auth", __name__)
-
-
-"""
-    Esta é o caminho final da rota de registro de novo usuário.
-    
-    Nesta função eu irei:
-      1 validar se todos os dados foram preenchidos no front end.
-      2 verificar no banco de dados se existe algum dado repetido que não pode existir.
-            2.1 Se um dado estiver repetido, irei retornar um erro para o frontend
-            2.2 Se não houver dados repetidos e eles estiverem dentro das regras do banco:
-                3 eu criptografo o password
-                4 crio o novo objeto no db
-"""
 
 
 @auth.route("/auth/registrar", methods=["POST"])
@@ -44,8 +35,11 @@ def registrar():
         user = User(username=nome, email=email, password=password)
         db.session.add(user)
         db.session.commit()
+        access_token = create_access_token(identity=user.id)
 
-        return jsonify({"success": "Usuário cadastrado"}), 200
+        return jsonify(
+            {"success": "Usuário cadastrado", "access_token": access_token}
+        ), 201
 
     except Exception as e:
         db.session.rollback()

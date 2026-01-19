@@ -2,21 +2,23 @@ from flask import Flask
 from database.db import db
 from models import User
 from flask_cors import CORS
-
 from routes.auth import auth
 
+from flask_jwt_extended import JWTManager
+
 app = Flask(__name__)
-
 CORS(app)
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-
 db.init_app(app)
+
+app.config["JWT_SECRET_KEY"] = "!mdoK8&33hir$?ksksOO9-D=5J9F04Ls0j48vb"
+jwt = JWTManager(app)
 
 with app.app_context():
     db.create_all()
 
 app.register_blueprint(auth)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
