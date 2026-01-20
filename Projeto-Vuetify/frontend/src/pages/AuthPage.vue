@@ -4,7 +4,7 @@
       <v-row class="d-flex justify-center align-center mt-16 flex-column">
         <p class="text-h3">Cadastre-se</p>
         <v-col style="width: 400px">
-          <v-form class="d-flex flex-column" v-model="formPreenchido" style="width: 366px">
+          <v-form class="d-flex flex-column mt-10" v-model="formPreenchido" style="width: 366px">
             <v-text-field
               prepend-icon="mdi-account"
               clearable
@@ -56,6 +56,7 @@ const loading = ref(false);
 const formPreenchido = ref(false);
 
 async function registrarUsuario() {
+  
   text.value = "";
   try {
     const payload = {

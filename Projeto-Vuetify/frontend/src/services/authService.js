@@ -4,6 +4,12 @@ export const authService = {
 
     registrar(dados) {
         return api.post('/auth/registrar', dados);
+    },
+
+    iniciarSessao(dados){
+        return api.post('auth/iniciarSessao', dados);
     }
+
+    
 
 }

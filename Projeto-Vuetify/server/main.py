@@ -7,10 +7,10 @@ from routes.auth import auth
 from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
-CORS(app)
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db.init_app(app)
-
+CORS(app)
 app.config["JWT_SECRET_KEY"] = "!mdoK8&33hir$?ksksOO9-D=5J9F04Ls0j48vb"
 jwt = JWTManager(app)
 

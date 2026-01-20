@@ -8,7 +8,7 @@
   >
     <v-list class="text-medium-emphasis text-h6">
       <v-list-item prepend-icon="mdi-home" to="/">Home</v-list-item>
-      <v-list-item prepend-icon="mdi-account" to="/Auth"
+      <v-list-item prepend-icon="mdi-account" to="/AuthPage"
         >Autenticação</v-list-item
       >
       <v-list-item prepend-icon="mdi-counter" to="/CounterPage"

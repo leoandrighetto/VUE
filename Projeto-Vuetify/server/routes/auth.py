@@ -45,3 +45,31 @@ def registrar():
         db.session.rollback()
         print(e)
         return jsonify({"Erro": "500"}), 500
+
+
+@auth.route("/auth/iniciarSessao", methods=["POST"])
+def iniciarSessao():
+    usuario = request.get_json()
+
+    email = usuario.get("email")
+    senha = usuario.get("password")
+
+    dados = ["email", "password"]
+
+    for dado in dados:
+        if not usuario.get(dado):
+            return jsonify({"erro": f"O {dado} é obrigatório"})
+
+    consulta = User.iniciar_sessao(email, senha)
+
+    if not consulta:
+        return jsonify({"Erro": "dados inválidos"}), 400
+
+    try:
+        token = create_access_token(identity=usuario.get("id"))
+        return jsonify({"success": "Sessão iniciada", "JWT": token})
+
+    except Exception as e:
+        db.session.rollback()
+        print(e)
+        return jsonify({"Erro": "500"}), 500
