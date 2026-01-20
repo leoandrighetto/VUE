@@ -19,8 +19,10 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
-    '/Auth': RouteRecordInfo<'/Auth', '/Auth', Record<never, never>, Record<never, never>>,
+    '/AuthPage': RouteRecordInfo<'/AuthPage', '/AuthPage', Record<never, never>, Record<never, never>>,
     '/CounterPage': RouteRecordInfo<'/CounterPage', '/CounterPage', Record<never, never>, Record<never, never>>,
+    '/LoginPage': RouteRecordInfo<'/LoginPage', '/LoginPage', Record<never, never>, Record<never, never>>,
+    '/UserPage': RouteRecordInfo<'/UserPage', '/UserPage', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -38,12 +40,20 @@ declare module 'vue-router/auto-routes' {
       routes: '/'
       views: never
     }
-    'src/pages/Auth.vue': {
-      routes: '/Auth'
+    'src/pages/AuthPage.vue': {
+      routes: '/AuthPage'
       views: never
     }
     'src/pages/CounterPage.vue': {
       routes: '/CounterPage'
+      views: never
+    }
+    'src/pages/LoginPage.vue': {
+      routes: '/LoginPage'
+      views: never
+    }
+    'src/pages/UserPage.vue': {
+      routes: '/UserPage'
       views: never
     }
   }
